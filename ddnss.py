@@ -12,6 +12,9 @@ from urllib.parse import urlencode, urlunparse
 from urllib.request import urlopen
 
 
+__all__ = ['UpdateError', 'update']
+
+
 if name == 'posix':
     CONFIG_FILE = Path('/etc/ddnss.conf')
 elif name == 'nt':
