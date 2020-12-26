@@ -11,7 +11,7 @@ setup(
     author_email='mail@richard-neumann.de',
     python_requires='>=3.8',
     py_modules=['ddnss'],
-    entry_points={'console_scripts': ['ddnss = ddnss:main']},
+    entry_points={'console_scripts': ['ddnssupd = ddnss:main']},
     url='https://github.com/conqp/ddnss',
     license='GPLv3',
     description='Update DynDNS hosts registered at ddnss.de.',
