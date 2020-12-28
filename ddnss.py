@@ -70,7 +70,7 @@ def main():
     config = ConfigParser()
     config.read(args.config_file)
 
-    if (key := args.key is None):
+    if (key := args.key) is None:
         try:
             key = config.get(args.host, 'key')
         except KeyError:
