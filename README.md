@@ -9,7 +9,7 @@ Install ddnss from the [AUR](https://aur.archlinux.org/packages/python-ddnss/) o
 ## Usage
 You can run the client from the console via
 
-    ddnss <host> [-k <key>] [-f <config_file>] [-d]
+    ddnssupd <host> [-k <key>] [-f <config_file>] [-d]
 
 Per default, the config file is read from `/etc/ddnss.conf` on POSIX systems and from `%LOCALAPPDATA%\ddnss.conf` on Windows systems.
 
