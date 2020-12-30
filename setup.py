@@ -1,7 +1,18 @@
 #! /usr/bin/env python
 """Installation script."""
 
+from os import name
 from setuptools import setup
+
+
+if name == 'posix':
+    DATA_FILES = [
+        ('/usr/lib/systemd/system', ['ddnss@.service', 'ddnss@.timer']),
+        ('/usr/lib/sysusers.d', ['ddnss.conf'])
+    ]
+else:
+    DATA_FILES = []
+
 
 setup(
     name='ddnss',
@@ -12,6 +23,7 @@ setup(
     python_requires='>=3.8',
     py_modules=['ddnss'],
     entry_points={'console_scripts': ['ddnssupd = ddnss:main']},
+    data_files=DATA_FILES,
     url='https://github.com/conqp/ddnss',
     license='GPLv3',
     description='Update DynDNS hosts registered at ddnss.de.',
