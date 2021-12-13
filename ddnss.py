@@ -6,7 +6,7 @@ from logging import DEBUG, INFO, basicConfig, getLogger
 from os import getenv, name
 from pathlib import Path
 from re import search
-from sys import exit    # pylint: disable=W0622
+from typing import Iterator
 from urllib.error import URLError
 from urllib.parse import urlencode, urlunparse
 from urllib.request import urlopen
@@ -27,18 +27,15 @@ LOG_FORMAT = '[%(levelname)s] %(name)s: %(message)s'
 LOGGER = getLogger(Path(__file__).stem)
 REGEX = '(Updated \\d+ hostname\\.)'
 URL = ('https', 'ddnss.de', 'upd.php')
+URLv4 = ('https', 'ip4.ddnss.de', 'upd.php')
 
 
 class UpdateError(Exception):
     """Indicates an error during the update."""
 
 
-def update(host: str, key: str) -> str:
-    """Updates the respective host using the provided key."""
-
-    params = {'host': host, 'key': key}
-    url = urlunparse((*URL, None, urlencode(params), None))
-    LOGGER.debug('Update URL: %s', url)
+def update_url(url: str) -> str:
+    """Updates the respective URL."""
 
     with urlopen(url) as response:
         text = response.read().decode()
@@ -47,6 +44,17 @@ def update(host: str, key: str) -> str:
         return match.group(1)
 
     raise UpdateError(text)
+
+
+def update(host: str, key: str) -> Iterator[str]:
+    """Updates the respective host using the provided key."""
+
+    params = {'host': host, 'key': key}
+
+    for url in [URL, URLv4]:
+        url = urlunparse((*url, None, urlencode(params), None))
+        LOGGER.debug('Update URL: %s', url)
+        yield update_url(url)
 
 
 def get_args() -> Namespace:
@@ -62,7 +70,7 @@ def get_args() -> Namespace:
     return parser.parse_args()
 
 
-def main():
+def main() -> int:
     """Runs the CLI program."""
 
     args = get_args()
@@ -75,18 +83,20 @@ def main():
             key = config.get(args.host, 'key')
         except KeyError:
             LOGGER.error('No key configured for host "%s".', args.host)
-            exit(2)
+            return 2
 
     try:
-        message = update(args.host, key)
+        messages = list(update(args.host, key))
     except URLError as error:
         LOGGER.error('Failed to connect to service.')
         LOGGER.debug(error)
-        exit(3)
+        return 3
     except UpdateError as error:
         LOGGER.error('Failed to update host.')
         LOGGER.debug(error)
-        exit(4)
+        return 4
 
-    LOGGER.info(message)
-    exit(0)
+    for message in messages:
+        LOGGER.info(message)
+
+    return 0
