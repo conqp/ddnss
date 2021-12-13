@@ -6,7 +6,6 @@ from logging import DEBUG, INFO, basicConfig, getLogger
 from os import getenv, name
 from pathlib import Path
 from re import search
-from typing import Iterator
 from urllib.error import URLError
 from urllib.parse import urlencode, urlunparse
 from urllib.request import urlopen
@@ -37,6 +36,8 @@ class UpdateError(Exception):
 def update_url(url: str) -> str:
     """Updates the respective URL."""
 
+    LOGGER.debug('Updating URL: %s', url)
+
     with urlopen(url) as response:
         text = response.read().decode()
 
@@ -46,15 +47,16 @@ def update_url(url: str) -> str:
     raise UpdateError(text)
 
 
-def update(host: str, key: str) -> Iterator[str]:
+def get_url(params: str, ipv4: bool) -> str:
+    """Returns the respective URL."""
+
+    return urlunparse([*(URLv4 if ipv4 else URL), None, params, None])
+
+
+def update(host: str, key: str, *, ipv4: bool = False) -> str:
     """Updates the respective host using the provided key."""
 
-    params = {'host': host, 'key': key}
-
-    for url in [URL, URLv4]:
-        url = urlunparse((*url, None, urlencode(params), None))
-        LOGGER.debug('Update URL: %s', url)
-        yield update_url(url)
+    return update_url(get_url(urlencode({'host': host, 'key': key}), ipv4))
 
 
 def get_args() -> Namespace:
@@ -65,6 +67,8 @@ def get_args() -> Namespace:
     parser.add_argument('-f', '--config-file', type=Path, default=CONFIG_FILE,
                         metavar='file', help='the config file to use')
     parser.add_argument('-k', '--key', metavar='key', help='the update key')
+    parser.add_argument('-4', '--ipv4', action='store_true',
+                        help='force IPv4 address')
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='verbose logging')
     return parser.parse_args()
@@ -77,6 +81,7 @@ def main() -> int:
     basicConfig(level=DEBUG if args.verbose else INFO, format=LOG_FORMAT)
     config = ConfigParser()
     config.read(args.config_file)
+    ipv4 = config.getboolean(args.host, 'ipv4', fallback=args.ipv4)
 
     if (key := args.key) is None:
         try:
@@ -86,7 +91,7 @@ def main() -> int:
             return 2
 
     try:
-        messages = list(update(args.host, key))
+        message = update(args.host, key, ipv4=ipv4)
     except URLError as error:
         LOGGER.error('Failed to connect to service.')
         LOGGER.debug(error)
@@ -96,7 +101,5 @@ def main() -> int:
         LOGGER.debug(error)
         return 4
 
-    for message in messages:
-        LOGGER.info(message)
-
+    LOGGER.info(message)
     return 0
