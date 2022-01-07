@@ -18,7 +18,7 @@ __all__ = ['UpdateError', 'update']
 if name == 'posix':
     CONFIG_FILE = Path('/etc/ddnss.conf')
 elif name == 'nt':
-    CONFIG_FILE = Path(getenv('LOCALAPPDATA')).joinpath('ddnss.conf')
+    CONFIG_FILE = Path(getenv('LOCALAPPDATA')) / 'ddnss.conf'
 else:
     raise NotImplementedError(f'Operating system "{name}" is not supported.')
 
