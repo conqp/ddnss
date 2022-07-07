@@ -64,13 +64,17 @@ def get_args() -> Namespace:
 
     parser = ArgumentParser(description='Update ddnss.de domains.')
     parser.add_argument('host', help='the host to update')
-    parser.add_argument('-f', '--config-file', type=Path, default=CONFIG_FILE,
-                        metavar='file', help='the config file to use')
+    parser.add_argument(
+        '-f', '--config-file', type=Path, default=CONFIG_FILE,
+        metavar='file', help='the config file to use'
+    )
     parser.add_argument('-k', '--key', metavar='key', help='the update key')
-    parser.add_argument('-4', '--ipv4', action='store_true',
-                        help='force IPv4 address')
-    parser.add_argument('-v', '--verbose', action='store_true',
-                        help='verbose logging')
+    parser.add_argument(
+        '-4', '--ipv4', action='store_true', help='force IPv4 address'
+    )
+    parser.add_argument(
+        '-v', '--verbose', action='store_true', help='verbose logging'
+    )
     return parser.parse_args()
 
 
