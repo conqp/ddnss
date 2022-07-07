@@ -24,7 +24,7 @@ else:
 
 LOG_FORMAT = '[%(levelname)s] %(name)s: %(message)s'
 LOGGER = getLogger(Path(__file__).stem)
-REGEX = '(Updated \\d+ hostname\\.)'
+REGEX = r'(Updated \d+ hostname\.)'
 URL = ('https', 'ddnss.de', 'upd.php')
 URLv4 = ('https', 'ip4.ddnss.de', 'upd.php')
 
