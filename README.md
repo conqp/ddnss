@@ -20,7 +20,7 @@ The expected config file format is a simple INI-Style:
     key = <key>
 
 ## License
-Copyright (C) 2018-2020 Richard Neumann <mail at richard dash neumann period de>
+Copyright (C) 2018-2022 Richard Neumann <mail at richard dash neumann period de>
 
 ddnss is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
