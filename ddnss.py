@@ -1,4 +1,4 @@
-"""Updates ddnss.de domains."""
+"""Update ddnss.de domains."""
 
 from argparse import ArgumentParser, Namespace
 from configparser import ConfigParser
@@ -30,11 +30,11 @@ URLv4 = ('https', 'ip4.ddnss.de', 'upd.php')
 
 
 class UpdateError(Exception):
-    """Indicates an error during the update."""
+    """Indicate an error during the update."""
 
 
 def update_url(url: str) -> str:
-    """Updates the respective URL."""
+    """Update the respective URL."""
 
     LOGGER.debug('Updating URL: %s', url)
 
@@ -48,19 +48,19 @@ def update_url(url: str) -> str:
 
 
 def get_url(params: str, ipv4: bool) -> str:
-    """Returns the respective URL."""
+    """Return the respective URL."""
 
     return urlunparse([*(URLv4 if ipv4 else URL), None, params, None])
 
 
 def update(host: str, key: str, *, ipv4: bool = False) -> str:
-    """Updates the respective host using the provided key."""
+    """Update the respective host using the provided key."""
 
     return update_url(get_url(urlencode({'host': host, 'key': key}), ipv4))
 
 
 def get_args() -> Namespace:
-    """Parses the CLI arguments."""
+    """Parse the CLI arguments."""
 
     parser = ArgumentParser(description='Update ddnss.de domains.')
     parser.add_argument('host', help='the host to update')
@@ -79,7 +79,7 @@ def get_args() -> Namespace:
 
 
 def main() -> int:
-    """Runs the CLI program."""
+    """Run the CLI program."""
 
     args = get_args()
     basicConfig(level=DEBUG if args.verbose else INFO, format=LOG_FORMAT)
