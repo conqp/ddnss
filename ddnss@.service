@@ -4,5 +4,6 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-DynamicUser=on
+User=ddnss
+Group=ddnss
 ExecStart=/usr/bin/ddnssupd %i
