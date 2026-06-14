@@ -1,5 +1,5 @@
 [Unit]
-Description=Hourly update ddnss.de entry for %i
+Description=Hourly update ddnss.de entries
 
 [Timer]
 OnCalendar=hourly
