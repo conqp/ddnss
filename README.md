@@ -12,7 +12,7 @@ Install ddnss from the [AUR](https://aur.archlinux.org/packages/python-ddnss/) o
 
 You can run the client from the console via
 
-    ddnss [-p <ip_protocol>]
+    ddnss
 
 The config file is read from `/etc/ddnss.conf`.
 
