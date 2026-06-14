@@ -1,15 +1,13 @@
 use std::fmt::Display;
 
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use url::Url;
 
 const IPV4_URL: &str = "https://ip4.ddnss.de/upd.php";
 const IPV6_URL: &str = "https://ddnss.de/upd.php";
 
 /// IP protocol type.
-#[derive(
-    Clone, Copy, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash, Deserialize, Serialize,
-)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash, Deserialize)]
 pub enum IpProtocol {
     /// IPv4
     V4,
