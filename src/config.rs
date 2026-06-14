@@ -2,7 +2,7 @@ use config::{Config, ConfigError, File};
 
 use crate::host::Host;
 
-const FILE_NAME: &str = "/etc/ddnss.conf";
+const FILE_NAME: &str = "/etc/ddnss";
 
 /// Load the config file contents.
 pub fn load() -> Result<Vec<Host>, ConfigError> {
