@@ -12,7 +12,7 @@ Install ddnss from the [AUR](https://aur.archlinux.org/packages/python-ddnss/) o
 
 You can run the client from the console via
 
-    ddnss [-p <ip_protocol>]
+    ddnss
 
 The config file is read from `/etc/ddnss.conf`.
 
@@ -22,3 +22,5 @@ The expected config file format is a simple INI-Style:
 
     [<host>]
     key = <key>
+    protocol = (v4|v6)  # optional, default: v6
+    timeout_secs = <n>  # optional, default: none
