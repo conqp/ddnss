@@ -4,7 +4,7 @@ Client program to update DynDNS hosts registered at ddnss.de.
 
 ## Installation
 
-Install `ddnss` from the [AUR](https://aur.archlinux.org/packages/python-ddnss/) or via:
+Install `ddnss` from the [AUR](https://aur.archlinux.org/packages/ddnss/) or via:
 
     $ cargo install --path .
 
