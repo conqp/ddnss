@@ -1,16 +1,21 @@
 use std::fmt::Display;
 
-use clap::ValueEnum;
-use clap::builder::PossibleValue;
+use serde::{Deserialize, Serialize};
 use url::Url;
 
 const IPV4_URL: &str = "https://ip4.ddnss.de/upd.php";
 const IPV6_URL: &str = "https://ddnss.de/upd.php";
 
 /// IP protocol type.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(
+    Clone, Copy, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash, Deserialize, Serialize,
+)]
 pub enum IpProtocol {
+    /// IPv4
     V4,
+
+    /// IPv6
+    #[default]
     V6,
 }
 
@@ -30,18 +35,5 @@ impl From<IpProtocol> for Url {
             IpProtocol::V6 => Self::parse(IPV6_URL),
         }
         .expect("URL is valid.")
-    }
-}
-
-impl ValueEnum for IpProtocol {
-    fn value_variants<'a>() -> &'a [Self] {
-        &[Self::V4, Self::V6]
-    }
-
-    fn to_possible_value(&self) -> Option<PossibleValue> {
-        match self {
-            Self::V4 => Some(PossibleValue::new("ipv4")),
-            Self::V6 => Some(PossibleValue::new("ipv6")),
-        }
     }
 }

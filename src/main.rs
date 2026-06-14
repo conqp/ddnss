@@ -2,13 +2,10 @@
 
 use std::process::ExitCode;
 
-use clap::Parser;
 use log::{error, info};
 
-use crate::args::Args;
 use crate::config::load;
 
-mod args;
 mod config;
 mod host;
 mod ip_protocol;
@@ -16,7 +13,6 @@ mod update;
 
 #[tokio::main]
 async fn main() -> ExitCode {
-    let args = Args::parse();
     env_logger::init();
 
     let Ok(config) = load().inspect_err(|error| error!("Failed to load config: {error}")) else {
@@ -26,7 +22,7 @@ async fn main() -> ExitCode {
     let mut exit_code = ExitCode::SUCCESS;
 
     for entry in config {
-        match entry.update(args.ip_protocol.into()).await {
+        match entry.update().await {
             Ok(update) => {
                 if let Some(amount) = update {
                     info!("Updated {amount} hosts.");
