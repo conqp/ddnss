@@ -7,10 +7,10 @@ use log::{error, info};
 
 use crate::args::Args;
 use crate::config::load;
-use crate::update::Update;
 
 mod args;
 mod config;
+mod host;
 mod ip_protocol;
 mod update;
 

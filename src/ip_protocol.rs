@@ -4,6 +4,9 @@ use clap::ValueEnum;
 use clap::builder::PossibleValue;
 use url::Url;
 
+const IPV4_URL: &str = "https://ip4.ddnss.de/upd.php";
+const IPV6_URL: &str = "https://ddnss.de/upd.php";
+
 /// IP protocol type.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum IpProtocol {
@@ -23,8 +26,8 @@ impl Display for IpProtocol {
 impl From<IpProtocol> for Url {
     fn from(endpoint: IpProtocol) -> Self {
         match endpoint {
-            IpProtocol::V4 => Self::parse("https://ip4.ddnss.de/upd.php"),
-            IpProtocol::V6 => Self::parse("https://ddnss.de/upd.php"),
+            IpProtocol::V4 => Self::parse(IPV4_URL),
+            IpProtocol::V6 => Self::parse(IPV6_URL),
         }
         .expect("URL is valid.")
     }
