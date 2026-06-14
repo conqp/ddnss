@@ -8,26 +8,22 @@ use crate::ip_protocol::IpProtocol;
 use crate::parse_response::parse_response;
 
 /// Information about a host.
-#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Deserialize, Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Host {
     name: String,
-    key: String,
-    #[serde(default)]
-    protocol: IpProtocol,
-    #[serde(default)]
-    timeout_secs: Option<u64>,
+    settings: Settings,
 }
 
 impl Host {
     /// Update this host.
     ///
-    /// # Errors
+    /// # Error
     ///
     /// Returns a [`reqwest::Error`] if the HTTP request fails.
     pub async fn update(&self) -> reqwest::Result<Option<usize>> {
         let mut client = Client::new().get(self.url());
 
-        if let Some(timeout_secs) = self.timeout_secs {
+        if let Some(timeout_secs) = self.settings.timeout_secs {
             client = client.timeout(Duration::from_secs(timeout_secs));
         }
 
@@ -42,8 +38,27 @@ impl Host {
 
     /// Return the update URL.
     fn url(&self) -> Url {
-        let mut url: Url = self.protocol.into();
-        url.set_query(Some(&format!("hostname={}&key={}", self.name, self.key)));
+        let mut url: Url = self.settings.protocol.into();
+        url.set_query(Some(&format!(
+            "hostname={}&key={}",
+            self.name, self.settings.key
+        )));
         url
     }
+}
+
+impl From<(String, Settings)> for Host {
+    fn from((name, settings): (String, Settings)) -> Self {
+        Self { name, settings }
+    }
+}
+
+/// Settings of a host.
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Deserialize, Serialize)]
+pub struct Settings {
+    key: String,
+    #[serde(default)]
+    protocol: IpProtocol,
+    #[serde(default)]
+    timeout_secs: Option<u64>,
 }

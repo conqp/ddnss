@@ -4,7 +4,7 @@ Client program to update DynDNS hosts registered at ddnss.de.
 
 ## Installation
 
-Install ddnss from the [AUR](https://aur.archlinux.org/packages/python-ddnss/) or via:
+Install `ddnss` from the [AUR](https://aur.archlinux.org/packages/python-ddnss/) or via:
 
     $ cargo install --path .
 
@@ -14,13 +14,13 @@ You can run the client from the console via
 
     ddnss
 
-The config file is read from `/etc/ddnss.conf`.
+The config file is read from `/etc/ddnss.toml`.
 
 ## Configuration file
 
-The expected config file format is a simple INI-Style:
+There are multiple configuration file formats supported, e.g. _TOML_:
 
-    [<host>]
+    [<hostname>]
     key = <key>
     protocol = (v4|v6)  # optional, default: v6
     timeout_secs = <n>  # optional, default: none
