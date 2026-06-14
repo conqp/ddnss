@@ -22,3 +22,5 @@ The expected config file format is a simple INI-Style:
 
     [<host>]
     key = <key>
+    protocol = (v4|v6)  # optional, default: v6
+    timeout_secs = <n>  # optional, default: none
