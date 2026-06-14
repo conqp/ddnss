@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs::OpenOptions;
-use std::io::{Error, Read};
+use std::io::{Error, Read, Result};
 use std::time::Duration;
 
 use serde::Deserialize;
@@ -21,7 +21,7 @@ impl Settings {
     const FILE_NAME: &str = "/etc/ddnss.json";
 
     /// Load the config file contents.
-    pub fn load() -> std::io::Result<Vec<Self>> {
+    pub fn load() -> Result<Self> {
         let mut text = String::new();
         OpenOptions::new()
             .read(true)
