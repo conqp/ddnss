@@ -49,7 +49,7 @@ impl Host {
 
 impl From<(String, Settings)> for Host {
     fn from((name, settings): (String, Settings)) -> Self {
-        Host { name, settings }
+        Self { name, settings }
     }
 }
 
