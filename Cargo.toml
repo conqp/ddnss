@@ -1,5 +1,10 @@
 [package]
 name = "ddnss"
+description = "A dyn DNS service update client"
+license = "MIT"
+repository = "https://github.com/conqp/ddnss"
+categories = ["api-bindings", "command-line-utilities"]
+keywords = ["DNS", "dyn", "ddnss"]
 version = "0.1.0"
 edition = "2024"
 
