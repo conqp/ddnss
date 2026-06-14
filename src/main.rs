@@ -3,8 +3,10 @@
 use std::process::ExitCode;
 
 use log::{error, info};
+use tokio::spawn;
 
 use crate::config::load;
+use crate::host::Host;
 
 mod config;
 mod host;
@@ -21,19 +23,33 @@ async fn main() -> ExitCode {
 
     let mut exit_code = ExitCode::SUCCESS;
 
-    for entry in config {
-        match entry.update().await {
-            Ok(update) => {
-                if let Some(amount) = update {
-                    info!("Updated {amount} hosts.");
-                }
-            }
-            Err(error) => {
-                error!("Failed to update host: {error}");
+    let tasks: Vec<_> = config.into_iter().map(|host| spawn(update(host))).collect();
+
+    for task in tasks {
+        if let Ok(result) = task.await {
+            if result != ExitCode::SUCCESS {
                 exit_code = ExitCode::FAILURE;
             }
+        } else {
+            exit_code = ExitCode::FAILURE;
         }
     }
 
     exit_code
+}
+
+async fn update(host: Host) -> ExitCode {
+    match host.update().await {
+        Ok(update) => {
+            if let Some(amount) = update {
+                info!("Updated {amount} hosts.");
+            }
+
+            ExitCode::SUCCESS
+        }
+        Err(error) => {
+            error!("Failed to update host: {error}");
+            ExitCode::FAILURE
+        }
+    }
 }
