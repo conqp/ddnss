@@ -14,13 +14,13 @@ pub fn parse_response<T>(text: T) -> Option<usize>
 where
     T: AsRef<str>,
 {
-    let Some(capture) = REGEX.captures(text.as_ref()) else {
+    let Some(captures) = REGEX.captures(text.as_ref()) else {
         error!("Did not capture via regex. Has the API changed?");
         error!("Original text on next line:\n{}", text.as_ref());
         return None;
     };
 
-    capture["n"]
+    captures["n"]
         .parse()
         .inspect_err(|error| error!("Failed to parse usize: {error}"))
         .ok()
