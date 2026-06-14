@@ -1,6 +1,6 @@
 use std::sync::LazyLock;
 
-use log::error;
+use log::{error, trace};
 use regex::Regex;
 
 static REGEX: LazyLock<Regex> = LazyLock::new(|| {
@@ -20,8 +20,10 @@ where
         return None;
     };
 
-    captures["n"]
-        .parse()
+    let cap = &captures["n"];
+    trace!(r#"Cap: "{cap}""#);
+
+    cap.parse()
         .inspect_err(|error| error!("Failed to parse usize: {error}"))
         .ok()
 }
