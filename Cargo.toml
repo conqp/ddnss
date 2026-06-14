@@ -13,7 +13,6 @@ env_logger = "0.11.8"
 clap = { version = "4.5.54", features = ["derive"] }
 tokio = { version = "1.49.0", features = ["rt", "rt-multi-thread", "macros"] }
 
-
 [profile.release]
 strip = true
 lto = true
@@ -73,7 +72,7 @@ redundant_clone = "warn"
 redundant_type_annotations = "warn"
 string_add = "warn"
 string_slice = "warn"
-string_to_string = "warn"
+implicit_clone = "warn"
 trailing_empty_array = "warn"
 transmute_undefined_repr = "warn"
 unnecessary_self_imports = "warn"
