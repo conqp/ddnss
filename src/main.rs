@@ -5,25 +5,30 @@ use std::process::ExitCode;
 use log::{error, info};
 use tokio::spawn;
 
-use crate::config::load;
-use crate::host::Host;
+use crate::settings::Settings;
+use crate::update::Update;
 
-mod config;
-mod host;
 mod ip_protocol;
 mod parse_response;
+mod settings;
+mod update;
 
 #[tokio::main]
 async fn main() -> ExitCode {
     env_logger::init();
 
-    let Ok(config) = load().inspect_err(|error| error!("Failed to load config: {error}")) else {
+    let Ok(config) = Settings::load().inspect_err(|error| error!("Failed to load config: {error}"))
+    else {
         return ExitCode::FAILURE;
     };
 
     let mut exit_code = ExitCode::SUCCESS;
 
-    let tasks: Vec<_> = config.into_iter().map(|host| spawn(update(host))).collect();
+    let tasks: Vec<_> = config
+        .into_iter()
+        .flat_map(Settings::updates)
+        .map(|upd| spawn(update(upd)))
+        .collect();
 
     for task in tasks {
         if let Ok(result) = task.await {
@@ -38,8 +43,8 @@ async fn main() -> ExitCode {
     exit_code
 }
 
-async fn update(host: Host) -> ExitCode {
-    match host.update().await {
+async fn update(update: Update) -> ExitCode {
+    match update.run().await {
         Ok(update) => {
             if let Some(amount) = update {
                 info!("Updated {amount} hosts.");

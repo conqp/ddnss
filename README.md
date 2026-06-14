@@ -14,13 +14,23 @@ You can run the client from the console via
 
     ddnss
 
-The config file is read from `/etc/ddnss.toml`.
+The config file is read from `/etc/ddnss.json`.
 
 ## Configuration file
 
-There are multiple configuration file formats supported, e.g. _TOML_:
+The configuration file format is as follows:
 
-    [<hostname>]
-    key = <key>
-    protocol = (v4|v6)  # optional, default: v6
-    timeout_secs = <n>  # optional, default: none
+    {
+        "key": "your_update_key",
+        "hosts": {
+            "V4": [
+                "ipv4.host.name.one",
+                "ipv4.host.name.two"
+            ],
+            "V6": [
+                "ipv6.host.name.one",
+                "ipv6.host.name.two"
+            ]
+        },
+        "timeout_secs": null
+    }
