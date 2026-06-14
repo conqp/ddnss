@@ -1,10 +1,10 @@
 use std::sync::LazyLock;
 
-use log::{error, trace};
+use log::error;
 use regex::Regex;
 
 static REGEX: LazyLock<Regex> = LazyLock::new(|| {
-    r"(Updated \d+ hostname\.)"
+    r"Updated (?<n>\d+) hostname\."
         .parse()
         .expect("Regex is valid.")
 });
@@ -14,17 +14,14 @@ pub fn parse_response<T>(text: T) -> Option<usize>
 where
     T: AsRef<str>,
 {
-    let text = text.as_ref();
-    trace!("Parsing response: {text}");
+    let Some(capture) = REGEX.captures(text.as_ref()) else {
+        error!("Did not capture via regex. Has the API changed?");
+        error!("Original text on next line:\n{}", text.as_ref());
+        return None;
+    };
 
-    REGEX
-        .captures(text)
-        .and_then(|c| c.iter().flatten().next())
-        .and_then(|capture| {
-            capture
-                .as_str()
-                .parse()
-                .inspect_err(|error| error!("Failed to parse usize: {error}"))
-                .ok()
-        })
+    capture["n"]
+        .parse()
+        .inspect_err(|error| error!("Failed to parse usize: {error}"))
+        .ok()
 }
