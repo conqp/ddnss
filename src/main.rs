@@ -9,7 +9,7 @@ use crate::config::load;
 mod config;
 mod host;
 mod ip_protocol;
-mod update;
+mod parse_response;
 
 #[tokio::main]
 async fn main() -> ExitCode {
