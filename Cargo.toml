@@ -10,13 +10,13 @@ edition = "2024"
 
 [dependencies]
 config = "0.15"
-reqwest = "0.13"
-url = "2"
-regex = "1"
-log = "0.4"
 env_logger = "0.11"
-tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros"] }
+log = "0.4"
+regex = "1"
+reqwest = "0.13"
 serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros"] }
+url = "2"
 
 [profile.release]
 strip = true
