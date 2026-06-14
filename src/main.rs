@@ -23,7 +23,10 @@ async fn main() -> ExitCode {
 
     let mut exit_code = ExitCode::SUCCESS;
 
-    let tasks: Vec<_> = config.into_iter().map(|host| spawn(update(host))).collect();
+    let tasks: Vec<_> = config
+        .into_iter()
+        .map(|entry| spawn(update(entry.into())))
+        .collect();
 
     for task in tasks {
         if let Ok(result) = task.await {
