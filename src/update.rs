@@ -7,6 +7,7 @@ use crate::ip_protocol::IpProtocol;
 use crate::parse_response::parse_response;
 
 /// Settings for an update query.
+#[derive(Clone, Debug)]
 pub struct Update {
     protocol: IpProtocol,
     key: String,
